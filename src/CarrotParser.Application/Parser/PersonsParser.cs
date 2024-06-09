@@ -27,7 +27,7 @@ internal class PersonsParser : IPersonsParser
         }
     }
 
-    private async Task<T> GetPersonValuesAsync<T>(CancellationToken cancellationToken, int count = 1)
+    private static async Task<T> GetPersonValuesAsync<T>(CancellationToken cancellationToken, int count = 1)
     {
         var json = await GetJsonAsync(count, cancellationToken);
         return JsonSerializer.Deserialize<T>(json) ?? throw new NullReferenceException("Can't parse person's json.");
