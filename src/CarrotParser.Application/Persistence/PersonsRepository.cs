@@ -1,12 +1,12 @@
-﻿using CarrotParser.Application.Model;
+﻿using CarrotParser.Application.Database;
+using CarrotParser.Application.Model;
 using LiteDB;
 
 namespace CarrotParser.Application.Persistence;
 
-internal class PersonsRepository(LiteDatabase db) : IPersonsRepository
+internal class PersonsRepository(LiteDatabase database) : IPersonsRepository
 {
-    private readonly LiteDatabase _db = db;
-    private ILiteCollection<Person> Persons => _db.GetCollection<Person>();
+    private ILiteCollection<Person> Persons => database.GetCollection<Person>();
 
     public void CreatePerson(Person person)
     {
