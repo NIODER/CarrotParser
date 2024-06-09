@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarrotParser.Application", "CarrotParser.Application\CarrotParser.Application.csproj", "{D978BC81-99AD-4F2B-99BA-2693310364F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarrotParser.Presentation", "CarrotParser.Presentation\CarrotParser.Presentation.csproj", "{E53A94ED-6455-4741-89DC-5DD7AFBCC374}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D978BC81-99AD-4F2B-99BA-2693310364F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D978BC81-99AD-4F2B-99BA-2693310364F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D978BC81-99AD-4F2B-99BA-2693310364F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D978BC81-99AD-4F2B-99BA-2693310364F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E53A94ED-6455-4741-89DC-5DD7AFBCC374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E53A94ED-6455-4741-89DC-5DD7AFBCC374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E53A94ED-6455-4741-89DC-5DD7AFBCC374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E53A94ED-6455-4741-89DC-5DD7AFBCC374}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
