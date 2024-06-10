@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarrotParser.Presentation"
         mc:Ignorable="d"
-        Title="ConnectionStringWindow" Height="450" Width="800">
+        Title="ConnectionStringWindow" Height="170" Width="380">
     <Window.DataContext>
         <Binding Path="ConnectionStringViewModel">
             <Binding.Source>
@@ -14,7 +14,16 @@
         </Binding>
     </Window.DataContext>
     <Grid>
-        <Label Content="Connection string" />
-        <TextBox Text="{Binding ConnectionString}" />
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Connection string" />
+        <TextBox Grid.Row="1" Height="25" Text="{Binding ConnectionString}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Content="Save" 
+                Height="25" Width="120" 
+                Command="{Binding UpdateConnectionStringCommand}" Click="SaveButtonClick"/>
     </Grid>
 </Window>

@@ -23,5 +23,10 @@ namespace CarrotParser.Presentation.Views
         {
             InitializeComponent();
         }
+
+        private void SaveButtonClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
