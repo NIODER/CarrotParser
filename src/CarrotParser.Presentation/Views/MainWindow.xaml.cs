@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using CarrotParser.Presentation.ViewModels.Common;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
