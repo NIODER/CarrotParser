@@ -1,4 +1,6 @@
 ﻿using CarrotParser.Application;
+using CarrotParser.Presentation.ViewModels;
+using CarrotParser.Presentation.ViewModels.Common;
 using CarrotParser.Presentation.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,7 +44,7 @@ public partial class App : System.Windows.Application
 
     private static void RegisterWindowServices()
     {
-        //WindowService.RegisterWindow<WindowViewModel, Window>();
+        WindowService.RegisterWindow<ConnectionStringViewModel, ConnectionStringWindow>();
     }
 
     private static IConfiguration GetConfiguration()

@@ -1,4 +1,6 @@
 ﻿using CarrotParser.Presentation.ViewModels;
+using CarrotParser.Presentation.ViewModels.Common;
+using CarrotParser.Presentation.ViewModels.Common.Interfaces;
 using CarrotParser.Presentation.Views;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,8 +10,10 @@ internal static class DependencyInjection
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
-        services.AddViews();
         services.AddSingleton<Locator>();
+        services.AddSingleton<IWindowService, WindowService>();
+        services.AddSingleton<IDialogService, DialogService>();
+        services.AddViews();
         services.AddViewModels();
         return services;
     }

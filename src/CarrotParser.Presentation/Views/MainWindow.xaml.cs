@@ -1,6 +1,4 @@
-﻿using CarrotParser.Presentation.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace CarrotParser.Presentation
+namespace CarrotParser.Presentation.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,7 +21,6 @@ namespace CarrotParser.Presentation
     {
         public MainWindow()
         {
-            DataContext = new MainViewModel(null);
             InitializeComponent();
         }
     }
