@@ -15,22 +15,6 @@ internal class DialogService : IDialogService
         _mappings.Add(typeof(TViewModel), typeof(TView));
     }
 
-    private static void ShowDialogInternal(Type viewType, ViewModelBase viewModel, Action<bool> callback)
-    {
-        DialogWindow _dialogWindow = new();
-        void closeEventHandler(object? s, EventArgs r)
-        {
-            callback(_dialogWindow.DialogResult ?? false);
-            _dialogWindow.Closed -= closeEventHandler;
-        }
-        _dialogWindow.Closed += closeEventHandler;
-        var content = Activator.CreateInstance(viewType) ?? throw new NullReferenceException();
-        var cont = (FrameworkElement)content;
-        cont.DataContext = viewModel;
-        _dialogWindow.Content = content;
-        _dialogWindow.ShowDialog();
-    }
-
     public void ShowDialog(ViewModelBase viewModel, Action<bool> callback, string? questionText)
     {
         var viewType = _mappings[viewModel.GetType()];
@@ -57,5 +41,21 @@ internal class DialogService : IDialogService
             dialog.SetQuestionText(questionText);
         }
         ShowDialogInternal(viewType, viewModel, callback);
+    }
+
+    private static void ShowDialogInternal(Type viewType, ViewModelBase viewModel, Action<bool> callback)
+    {
+        DialogWindow _dialogWindow = new();
+        void closeEventHandler(object? s, EventArgs r)
+        {
+            callback(_dialogWindow.DialogResult ?? false);
+            _dialogWindow.Closed -= closeEventHandler;
+        }
+        _dialogWindow.Closed += closeEventHandler;
+        var content = Activator.CreateInstance(viewType) ?? throw new NullReferenceException();
+        var cont = (FrameworkElement)content;
+        cont.DataContext = viewModel;
+        _dialogWindow.Content = content;
+        _dialogWindow.ShowDialog();
     }
 }

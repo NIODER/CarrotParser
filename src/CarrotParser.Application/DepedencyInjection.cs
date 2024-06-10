@@ -22,11 +22,7 @@ public static class DepedencyInjection
         {
             throw new ArgumentNullException(nameof(configuration), $"No \"{DB_CONFIGURATION_SECTION_NAME}\" section found in configuation.");
         }
-        var dbPath = configuration.GetSection("DbPath").Value;
-        if (string.IsNullOrEmpty(dbPath))
-        {
-            throw new NullReferenceException($"Section {DB_CONFIGURATION_SECTION_NAME} is null or empty.");
-        }
+        var dbPath = configuration.GetSection(DB_CONFIGURATION_SECTION_NAME).Value ?? string.Empty;
         services.AddSingleton<IDbManager, DbManager>(s => new DbManager(dbPath));
         return services;
     }

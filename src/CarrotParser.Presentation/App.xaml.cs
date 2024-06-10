@@ -1,5 +1,7 @@
 ﻿using CarrotParser.Application;
+using CarrotParser.Presentation.Views;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;
 
@@ -17,6 +19,8 @@ public partial class App : System.Windows.Application
         RegisterDialogServices();
         RegisterWindowServices();
         ApplicationHost.Start();
+        MainWindow = ApplicationHost.Services.GetRequiredService<MainWindow>();
+        MainWindow.Show();
         base.OnStartup(e);
     }
 
@@ -46,7 +50,7 @@ public partial class App : System.Windows.Application
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection()
             .Build();
-        configuration["DbConfiguration"] = "";
+        configuration[DepedencyInjection.DB_CONFIGURATION_SECTION_NAME] = "asdf";
         return configuration;
     }
 }

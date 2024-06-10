@@ -3,15 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarrotParser.Presentation"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
         <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
             <MenuItem Header="File">
+                <MenuItem Header="Connection string" Command="{Binding ShowConnectionStringWindow}" />
+            </MenuItem>
+            <MenuItem Header="Tools">
                 <MenuItem Header="Download" />
                 <MenuItem Header="Download many" />
                 <Separator />
-                <MenuItem Header="Move database"></MenuItem>
+                <MenuItem Header="Move database" />
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Top">

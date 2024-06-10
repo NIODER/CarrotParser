@@ -2,7 +2,7 @@
 
 namespace CarrotParser.Presentation.ViewModels.Common;
 
-internal class RelayCommand(Action<object> methodToExecute, Func<bool>? canExecuteEvaulator) : ICommand
+public class RelayCommand(Action<object> methodToExecute, Func<bool>? canExecuteEvaulator) : ICommand
 {
     public event EventHandler? CanExecuteChanged
     {
