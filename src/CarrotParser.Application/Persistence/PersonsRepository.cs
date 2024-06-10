@@ -48,4 +48,12 @@ internal class PersonsRepository(LiteDatabase database) : IPersonsRepository
     {
         return Persons.DeleteAll();
     }
+
+    public List<Person> Get(int shift, int count)
+    {
+        return Persons.Query()
+            .Offset(shift)
+            .Limit(count)
+            .ToList();
+    }
 }

@@ -8,6 +8,7 @@ public interface IPersonsRepository
     void CreatePerson(Person person);
     int DeleteAll();
     void DeletePerson(ObjectId id);
+    List<Person> Get(int shift, int count);
     Person? GetPersonByEmail(string email);
     Person? GetPersonById(ObjectId id);
     Person GetPersonByUsername(string username);
