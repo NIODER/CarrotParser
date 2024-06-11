@@ -11,19 +11,12 @@ public static class DepedencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbManager(configuration);
-        services.AddTransient(s => s.GetRequiredService<IDbManager>().Repository);
         return services;
     }
 
     private static IServiceCollection AddDbManager(this IServiceCollection services, IConfiguration configuration)
     {
-        var dbConfig = configuration.GetSection(DB_CONFIGURATION_SECTION_NAME);
-        if (!dbConfig.Exists())
-        {
-            throw new ArgumentNullException(nameof(configuration), $"No \"{DB_CONFIGURATION_SECTION_NAME}\" section found in configuation.");
-        }
-        var dbPath = configuration.GetSection(DB_CONFIGURATION_SECTION_NAME).Value ?? string.Empty;
-        services.AddSingleton<IDbManager, DbManager>(s => new DbManager(dbPath));
+        services.AddSingleton<IDbManager, DbManager>();
         return services;
     }
 }

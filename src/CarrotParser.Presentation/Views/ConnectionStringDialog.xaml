@@ -1,18 +1,11 @@
-﻿<Window x:Class="CarrotParser.Presentation.Views.ConnectionStringWindow"
+﻿<UserControl x:Class="CarrotParser.Presentation.Views.ConnectionStringDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CarrotParser.Presentation"
-        mc:Ignorable="d"
-        Title="ConnectionStringWindow" Height="170" Width="380">
-    <Window.DataContext>
-        <Binding Path="ConnectionStringViewModel">
-            <Binding.Source>
-                <local:Locator />
-            </Binding.Source>
-        </Binding>
-    </Window.DataContext>
+        xmlns:viewmodels="clr-namespace:CarrotParser.Presentation.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:ConnectionStringDialogViewModel}"
+        mc:Ignorable="d" Height="170" Width="380">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -20,10 +13,10 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Connection string" />
-        <TextBox Grid.Row="1" Height="25" Text="{Binding ConnectionString}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <TextBox Name="ConnectionStringTextBox" Grid.Row="1" Height="25" Text="{Binding ConnectionString}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
         <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" 
                 Content="Save" 
                 Height="25" Width="120" 
                 Command="{Binding UpdateConnectionStringCommand}" Click="SaveButtonClick"/>
     </Grid>
-</Window>
+</UserControl>

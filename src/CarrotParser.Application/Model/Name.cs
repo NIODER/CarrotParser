@@ -2,7 +2,7 @@
 
 public class Name
 {
-    public string Title { get; set; }
-    public string First { get; set; }
-    public string Last { get; set; }
-}
+    public string Title { get; set; } = null!;
+    public string First { get; set; } = null!;
+    public string Last { get; set; } = null!;
+    }

@@ -1,7 +1,6 @@
 ﻿namespace CarrotParser.Presentation.ViewModels.Common.Interfaces;
 
-internal interface IDialogService
+public interface IDialogService
 {
-    void ShowDialog(ViewModelBase viewModel, Action<bool> callback, string? questionText);
-    void ShowDialog<TViewModel>(Action<bool> callback, string? questionText) where TViewModel : ViewModelBase, IDialogViewModel;
+    void ShowDialog<TViewModel>(Action<object> callback) where TViewModel : ViewModelBase, IDialogViewModel;
 }

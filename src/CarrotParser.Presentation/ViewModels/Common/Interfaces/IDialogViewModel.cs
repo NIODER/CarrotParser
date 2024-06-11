@@ -1,6 +1,6 @@
 ﻿namespace CarrotParser.Presentation.ViewModels.Common.Interfaces;
 
-internal interface IDialogViewModel
+public interface IDialogViewModel
 {
-    void SetQuestionText(string text);
+    event Action<object>? OnResult;
 }

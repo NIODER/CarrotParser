@@ -13,6 +13,12 @@
             </Binding.Source>
         </Binding>
     </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="ButtonDefault">
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Width" Value="120" />
+        </Style>
+    </Window.Resources>
     <DockPanel>
         <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -26,8 +32,42 @@
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Top">
-            <ListBox>
-            </ListBox>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.9*" />
+                <RowDefinition Height="0.1*" />
+            </Grid.RowDefinitions>
+            <ListView Grid.Row="0" ItemsSource="{Binding People}" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Login.Username}" Header="Username" Width="110" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Name.First}" Header="Fistname" Width="110" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Name.Last}" Header="Lastname" Width="120" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Email}" Header="Email" Width="120" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Gender}" Header="Gender" Width="100" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Phone}" Header="Phone" Width="120" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Id.CreationTime}" Header="Created" Width="110" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.4*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource ButtonDefault}"
+                        IsEnabled="{Binding IsNotFirstPage}"
+                        Content="Previous"
+                        Command="{Binding PreviousPageCommand}" />
+                <Button Grid.Column="2" Style="{StaticResource ButtonDefault}"
+                        IsEnabled="{Binding HasMorePages}"
+                        Content="Next"
+                        Command="{Binding NextPageCommand}" />
+                <Label Grid.Column="1" 
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Content="{Binding PageNumber, Mode=OneWay}" />
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

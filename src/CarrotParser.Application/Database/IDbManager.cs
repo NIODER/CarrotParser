@@ -1,10 +1,10 @@
 ﻿using CarrotParser.Application.Persistence;
 
-namespace CarrotParser.Application.Database
+namespace CarrotParser.Application.Database;
+
+public interface IDbManager
 {
-    internal interface IDbManager
-    {
-        IPersonsRepository Repository { get; }
-        void MoveDatabase(string oldPath, string newPath);
-    }
+    IPersonsRepository CreateDatabase(string value);
+    IPersonsRepository? GetRepository();
+    void MoveDatabase(string oldPath, string newPath);
 }

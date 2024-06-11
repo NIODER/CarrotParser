@@ -40,11 +40,12 @@ public partial class App : System.Windows.Application
     private static void RegisterDialogServices()
     {
         //DialogService.RegisterDialog<Dialog, DialogViewModel>();
+        DialogService.RegisterDialog<ConnectionStringDialog, ConnectionStringDialogViewModel>();
     }
 
     private static void RegisterWindowServices()
     {
-        WindowService.RegisterWindow<ConnectionStringViewModel, ConnectionStringWindow>();
+        //WindowService.RegisterWindow<ConnectionStringDialogViewModel, ConnectionStringDialogWindow>();
     }
 
     private static IConfiguration GetConfiguration()

@@ -3,10 +3,10 @@
 public class Login
 {
     public Guid Uuid { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Salt { get; set; }
-    public string Md5 { get; set; }
-    public string Sha1 { get; set; }
-    public string Sha256 { get; set; }
+    public string Username { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public string Salt { get; set; } = null!;
+    public string Md5 { get; set; } = null!;
+    public string Sha1 { get; set; } = null!;
+    public string Sha256 { get; set; } = null!;
 }
