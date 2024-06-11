@@ -13,6 +13,9 @@
             </Binding.Source>
         </Binding>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="F4" Command="{Binding StopCommand}" />
+    </Window.InputBindings>
     <Window.Resources>
         <Style TargetType="Button" x:Key="ButtonDefault">
             <Setter Property="Height" Value="25" />
@@ -25,8 +28,8 @@
                 <MenuItem Header="Connection string" Command="{Binding ShowConnectionStringWindow}" />
             </MenuItem>
             <MenuItem Header="Tools">
-                <MenuItem Header="Download" />
-                <MenuItem Header="Download many" />
+                <MenuItem Header="Download one" Command="{Binding DownloadOneCommand}"/>
+                <MenuItem Header="Download 100" Command="{Binding DownloadManyCommand}" />
                 <Separator />
                 <MenuItem Header="Move database" />
             </MenuItem>

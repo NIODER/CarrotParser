@@ -8,15 +8,20 @@ namespace CarrotParser.Application.Parser;
 internal class PersonsParser : IPersonsParser
 {
     private const string URL = @"https://randomuser.me/api?inc=gender,name,login,email,nat,phone";
-
-    public Task<Person> GetPersonAsync(CancellationToken cancellationToken)
+    private readonly static JsonSerializerOptions _jsonOptions = new()
     {
-        return GetPersonValuesAsync<Person>(cancellationToken);
+        PropertyNameCaseInsensitive = true
+    };
+
+    public async Task<Person> GetPersonAsync(CancellationToken cancellationToken)
+    {
+        var people = await GetPersonValuesAsync<Person>(cancellationToken);
+        return people.First();
     }
 
     public Task<List<Person>> GetPersonsCollectionAsync(int count, CancellationToken cancellationToken)
     {
-        return GetPersonValuesAsync<List<Person>>(cancellationToken, count);
+        return GetPersonValuesAsync<Person>(cancellationToken, count);
     }
 
     public async IAsyncEnumerable<Person> GetPersonsAsync(int count, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -27,10 +32,11 @@ internal class PersonsParser : IPersonsParser
         }
     }
 
-    private static async Task<T> GetPersonValuesAsync<T>(CancellationToken cancellationToken, int count = 1)
+    private static async Task<List<T>> GetPersonValuesAsync<T>(CancellationToken cancellationToken, int count = 1)
     {
         var json = await GetJsonAsync(count, cancellationToken);
-        return JsonSerializer.Deserialize<T>(json) ?? throw new NullReferenceException("Can't parse person's json.");
+        return JsonNode.Parse(json)?["results"]?.Deserialize<List<T>>(_jsonOptions)  // из-за структуры ответа всегда там массив
+            ?? throw new NullReferenceException("Can't parse person's json.");
     }
 
     private static async Task<string> GetJsonAsync(int count, CancellationToken cancellationToken)

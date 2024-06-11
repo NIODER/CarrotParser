@@ -1,5 +1,6 @@
 ﻿using CarrotParser.Application.Database;
 using CarrotParser.Application.Model;
+using CarrotParser.Application.Parser;
 using CarrotParser.Presentation.ViewModels.Common;
 using CarrotParser.Presentation.ViewModels.Common.Interfaces;
 using System.Collections.ObjectModel;
@@ -7,33 +8,42 @@ using System.Windows;
 
 namespace CarrotParser.Presentation.ViewModels;
 
-public class MainViewModel : ViewModelBase
+public class MainViewModel : ViewModelBase, IDisposable
 {
-    private const int PEOPLE_ON_PAGE = 100;
+    private const int PEOPLE_ON_PAGE = 10;
 
     private readonly IDialogService _dialogService;
     private readonly IDbManager _dbManager;
+    private readonly IPersonsParser _personsParser;
 
-    private ObservableCollection<Person>? _people = [];
+    private ObservableCollection<Person> _people = [];
     private Person? _selectedPerson;
     private int _pageNumber = 0;
     private bool _hasMorePages = false;
 
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+
     public RelayCommand ShowConnectionStringWindow { get; private set; }
     public RelayCommand NextPageCommand { get; private set; }
     public RelayCommand PreviousPageCommand { get; private set; }
+    public RelayCommand DownloadOneCommand { get; private set; }
+    public RelayCommand DownloadManyCommand { get; private set; }
+    public RelayCommand StopCommand { get; private set; }
 
-    public MainViewModel(IDialogService dialogService, IDbManager dbManager)
+    public MainViewModel(IDialogService dialogService, IDbManager dbManager, IPersonsParser personsParser)
     {
         _dialogService = dialogService;
         _dbManager = dbManager;
-        LoadFirstPageAndCheckSecond();
+        _personsParser = personsParser;
         ShowConnectionStringWindow = new(OnShowConnectionStringWindowClick);
         NextPageCommand = new(OnNextPageCommandClick);
         PreviousPageCommand = new(OnPreviousPageCommandClick);
+        DownloadOneCommand = new(OnDownloadOneCommandClick);
+        DownloadManyCommand = new(OnDownloadManyCommandClick);
+        StopCommand = new(OnStopCommand);
     }
 
-    private void LoadFirstPageAndCheckSecond()
+    private void LoadFirstPageAndCheckForSecond()
     {
         var repository = _dbManager.GetRepository();
         if (repository is null)
@@ -79,6 +89,7 @@ public class MainViewModel : ViewModelBase
             {
                 MessageBox.Show($"Can't connect to database with connection string {connectionString}.");
             }
+            LoadFirstPageAndCheckForSecond();
         }
         catch (Exception e)
         {
@@ -90,23 +101,90 @@ public class MainViewModel : ViewModelBase
     {
         _pageNumber++;
         OnPropertyChanged(nameof(PageNumber));
-        if (!LoadPeopleAndReturnTrueIfSuccess())
-        {
-            MessageBox.Show("Can't load persons.");
-        }
+        UpdatePagesFlags();
     }
 
     private void OnPreviousPageCommandClick(object obj)
     {
         _pageNumber--;
         OnPropertyChanged(nameof(PageNumber));
+        UpdatePagesFlags();
         if (!LoadPeopleAndReturnTrueIfSuccess())
         {
             MessageBox.Show("Can't load persons.");
         }
     }
 
-    public ObservableCollection<Person>? People
+    private void UpdatePagesFlags()
+    {
+        OnPropertyChanged(nameof(IsNotFirstPage));
+        OnPropertyChanged(nameof(HasMorePages));
+        if (_people.Count < 10)
+        {
+            _hasMorePages = false;
+            OnPropertyChanged(nameof(HasMorePages));
+        }
+        else
+        {
+            _hasMorePages = true;
+        }
+    }
+
+    private async void OnDownloadOneCommandClick(object obj)
+    {
+        var repository = _dbManager.GetRepository();
+        if (repository is null)
+        {
+            MessageBox.Show("Can't operate with database.");
+            return;
+        }
+        try
+        {
+            var person = await _personsParser.GetPersonAsync(_cancellationTokenSource.Token);
+            repository.CreatePerson(person);
+            _people.Add(person);
+            OnPropertyChanged(nameof(People));
+        }
+        catch (TaskCanceledException)
+        {
+            MessageBox.Show("Downloading cancelled.");
+        }
+    }
+
+    private async void OnDownloadManyCommandClick(object obj)
+    {
+        var repository = _dbManager.GetRepository();
+        if (repository is null)
+        {
+            MessageBox.Show("Can't operate with database.");
+            return;
+        }
+        try
+        {
+            await foreach (var person in _personsParser.GetPersonsAsync(100, _cancellationTokenSource.Token))
+            {
+                repository.CreatePerson(person);
+                _people.Add(person);
+                OnPropertyChanged(nameof(People));
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            MessageBox.Show("Downloading cancelled.");
+        }
+    }
+
+    private void OnStopCommand(object obj)
+    {
+        _cancellationTokenSource.Cancel();
+    }
+
+    public void Dispose()
+    {
+        _dbManager.Dispose();
+    }
+
+    public ObservableCollection<Person> People
     {
         get => _people;
         set

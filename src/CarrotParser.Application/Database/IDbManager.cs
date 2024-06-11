@@ -2,7 +2,7 @@
 
 namespace CarrotParser.Application.Database;
 
-public interface IDbManager
+public interface IDbManager : IDisposable
 {
     IPersonsRepository CreateDatabase(string value);
     IPersonsRepository? GetRepository();

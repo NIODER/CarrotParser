@@ -1,5 +1,4 @@
-﻿using CarrotParser.Application.Database;
-using CarrotParser.Application.Model;
+﻿using CarrotParser.Application.Model;
 using LiteDB;
 
 namespace CarrotParser.Application.Persistence;

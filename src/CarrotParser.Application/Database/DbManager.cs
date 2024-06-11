@@ -3,7 +3,7 @@ using LiteDB;
 
 namespace CarrotParser.Application.Database;
 
-internal class DbManager : IDisposable, IDbManager
+internal class DbManager : IDbManager
 {
     private string _path = string.Empty;
     private LiteDatabase? _database;
