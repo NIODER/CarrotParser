@@ -24,6 +24,7 @@ internal static class DependencyInjection
         services.AddTransient<ConnectionStringDialog>();
         services.AddTransient<UpdatePersonDialog>();
         services.AddTransient<MoveDatabaseDialog>();
+        services.AddTransient<FindSelectorDialog>();
         return services;
     }
 
@@ -33,6 +34,7 @@ internal static class DependencyInjection
         services.AddTransient<ConnectionStringDialogViewModel>();
         services.AddTransient<UpdatePersonDialogViewModel>();
         services.AddTransient<MoveDatabaseDialogViewModel>();
+        services.AddTransient<FindSelectorDialogViewModel>();
         return services;
     }
 }

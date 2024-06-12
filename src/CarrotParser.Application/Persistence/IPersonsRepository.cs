@@ -1,5 +1,6 @@
 ﻿using CarrotParser.Application.Model;
 using LiteDB;
+using System.Linq.Expressions;
 
 namespace CarrotParser.Application.Persistence;
 
@@ -9,8 +10,9 @@ public interface IPersonsRepository
     int DeleteAll();
     void DeletePerson(ObjectId id);
     List<Person> Get(int shift, int count);
-    Person? GetPersonByEmail(string email);
+    List<Person> GetBetweenDateTimes(DateTime dateTimeSince, DateTime dateTimeTo);
+    List<Person> GetPersonsByEmail(string email);
+    List<Person> GetPersonByUsername(string username);
     Person? GetPersonById(ObjectId id);
-    Person GetPersonByUsername(string username);
     void UpdatePerson(Person person);
 }

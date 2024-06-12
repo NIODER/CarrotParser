@@ -26,6 +26,8 @@
         <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Connection string" Command="{Binding ShowConnectionStringWindow}" />
+                <Separator />
+                <MenuItem Header="Find" Command="{Binding FindCommand}" />
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Download one" Command="{Binding DownloadOneCommand}"/>

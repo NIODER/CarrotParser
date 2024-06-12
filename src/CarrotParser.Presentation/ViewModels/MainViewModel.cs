@@ -2,11 +2,14 @@
 using CarrotParser.Application.Database;
 using CarrotParser.Application.Model;
 using CarrotParser.Application.Parser;
+using CarrotParser.Presentation.Model;
 using CarrotParser.Presentation.ViewModels.Common;
 using CarrotParser.Presentation.ViewModels.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Linq.Expressions;
 using System.Windows;
 
 namespace CarrotParser.Presentation.ViewModels;
@@ -36,6 +39,7 @@ public class MainViewModel : ViewModelBase, IDisposable
     public RelayCommand UpdatePersonCommand { get; private set; }
     public RelayCommand DeletePersonCommand { get; private set; }
     public RelayCommand MoveDatabaseCommand { get; private set; }
+    public RelayCommand FindCommand { get; private set; }
 
     public MainViewModel(IDialogService dialogService, IDbManager dbManager, IPersonsParser personsParser, IConfiguration configuration)
     {
@@ -52,6 +56,7 @@ public class MainViewModel : ViewModelBase, IDisposable
         UpdatePersonCommand = new(OnUpdatePersonCommand);
         DeletePersonCommand = new(OnDeletePersonCommand);
         MoveDatabaseCommand = new(OnMoveDatabaseCommand);
+        FindCommand = new(OnFindCommand);
     }
 
     private void LoadFirstPageAndCheckForSecond()
@@ -217,6 +222,7 @@ public class MainViewModel : ViewModelBase, IDisposable
         _dialogService.ShowDialog<MoveDatabaseDialogViewModel>(MoveDatabaseCallback);
     }
 
+
     private void MoveDatabaseCallback(object newLocation)
     {
         string newPath = (string)newLocation;
@@ -228,6 +234,58 @@ public class MainViewModel : ViewModelBase, IDisposable
         }
         _dbManager.MoveDatabase(oldPath, newPath);
         MessageBox.Show($"Database moved to {newPath}.");
+    }
+
+    private void OnFindCommand(object obj)
+    {
+        _dialogService.ShowDialog<FindSelectorDialogViewModel>(FindBySelector);
+    }
+
+    private void FindBySelector(object selectorObj)
+    {
+        var selector = (FindSelector)selectorObj;
+        var repository = _dbManager.GetRepository();
+        if (repository is null)
+        {
+            MessageBox.Show("Can't operate with database.");
+            return;
+        }
+        _pageNumber = 0;
+        // if not setted
+        if (selector.Username is null && selector.Email is null && (selector.DateTimeTo is null || selector.DateTimeSince is null))
+        {
+            LoadFirstPageAndCheckForSecond();
+            return;
+        }
+        List<Person> people = [];
+        if (selector.Username is not null)
+        {
+            people = repository.GetPersonByUsername(selector.Username);
+        }
+        if (selector.Email is not null)
+        {
+            if (people.Count == 0)
+            {
+                people = repository.GetPersonsByEmail(selector.Email);
+            }
+            else
+            {
+                people = people.Where(p => p.Email == selector.Email).ToList();
+            }
+        }
+        if (selector.DateTimeSince is not null && selector.DateTimeTo is not null)
+        {
+            if (people.Count == 0)
+            {
+                people = repository.GetBetweenDateTimes(selector.DateTimeSince.Value.Date, selector.DateTimeTo.Value.Date);
+            }
+            else
+            {
+                people = people.Where(p => p.Id.CreationTime.Date >= selector.DateTimeSince.Value.Date
+                    && p.Id.CreationTime.Date >= selector.DateTimeSince.Value.Date).ToList();
+            }
+        }
+        People = new(people);
     }
 
     public void Dispose()

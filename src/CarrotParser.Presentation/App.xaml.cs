@@ -42,6 +42,7 @@ public partial class App : System.Windows.Application
         DialogService.RegisterDialog<ConnectionStringDialog, ConnectionStringDialogViewModel>();
         DialogService.RegisterDialog<UpdatePersonDialog, UpdatePersonDialogViewModel>();
         DialogService.RegisterDialog<MoveDatabaseDialog, MoveDatabaseDialogViewModel>();
+        DialogService.RegisterDialog<FindSelectorDialog, FindSelectorDialogViewModel>();
     }
 
     private static void RegisterWindowServices()
@@ -54,7 +55,7 @@ public partial class App : System.Windows.Application
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection()
             .Build();
-        configuration[DepedencyInjection.DB_CONFIGURATION_SECTION_NAME] = "asdf";
+        configuration[DepedencyInjection.DB_CONFIGURATION_SECTION_NAME] = "";
         return configuration;
     }
 }

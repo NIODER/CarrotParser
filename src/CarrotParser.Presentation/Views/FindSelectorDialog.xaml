@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="CarrotParser.Presentation.Views.FindSelectorDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:CarrotParser.Presentation.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:FindSelectorDialogViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="220" d:DesignWidth="400"
+             Background="White">
+    <StackPanel>
+        <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
+            <MenuItem Header="Clear" Command="{Binding ClearCommand}" />
+        </Menu>
+        <Label Content="Date from:" />
+        <DatePicker SelectedDate="{Binding FindSelector.DateTimeSince}">
+        </DatePicker>
+        <Label Content="Date to:" />
+        <DatePicker SelectedDate="{Binding FindSelector.DateTimeTo}">
+        </DatePicker>
+        <Label Content="Email:" />
+        <TextBox Text="{Binding FindSelector.Email}" />
+        <Label Content="Username:" />
+        <TextBox Text="{Binding FindSelector.Username}" />
+        <Button Margin="20" Content="Search" Command="{Binding SearchCommand}" Height="25" Width="120" Click="OnSearchCommandClick" />
+    </StackPanel>
+</UserControl>

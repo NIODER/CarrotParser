@@ -1,5 +1,6 @@
 ﻿using CarrotParser.Application.Model;
 using LiteDB;
+using System.Linq.Expressions;
 
 namespace CarrotParser.Application.Persistence;
 
@@ -19,18 +20,18 @@ internal class PersonsRepository(LiteDatabase database) : IPersonsRepository
             .FirstOrDefault();
     }
 
-    public Person? GetPersonByEmail(string email)
+    public List<Person> GetPersonsByEmail(string email)
     {
         return Persons.Query()
             .Where(p => p.Email == email)
-            .FirstOrDefault();
+            .ToList();
     }
 
-    public Person GetPersonByUsername(string username)
+    public List<Person> GetPersonByUsername(string username)
     {
         return Persons.Query()
             .Where(p => p.Login.Username == username)
-            .FirstOrDefault();
+            .ToList();
     }
 
     public void UpdatePerson(Person person)
@@ -53,6 +54,13 @@ internal class PersonsRepository(LiteDatabase database) : IPersonsRepository
         return Persons.Query()
             .Offset(shift)
             .Limit(count)
+            .ToList();
+    }
+
+    public List<Person> GetBetweenDateTimes(DateTime dateTimeSince, DateTime dateTimeTo)
+    {
+        return Persons.Query()
+            .Where(p => p.Id.CreationTime.Date >= dateTimeSince && p.Id.CreationTime.Date <= dateTimeTo)
             .ToList();
     }
 }
