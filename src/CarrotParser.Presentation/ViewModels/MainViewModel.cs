@@ -40,6 +40,7 @@ public class MainViewModel : ViewModelBase, IDisposable
     public RelayCommand DeletePersonCommand { get; private set; }
     public RelayCommand MoveDatabaseCommand { get; private set; }
     public RelayCommand FindCommand { get; private set; }
+    public RelayCommand LoadFirstPageCommand { get; private set; }
 
     public MainViewModel(IDialogService dialogService, IDbManager dbManager, IPersonsParser personsParser, IConfiguration configuration)
     {
@@ -57,16 +58,18 @@ public class MainViewModel : ViewModelBase, IDisposable
         DeletePersonCommand = new(OnDeletePersonCommand);
         MoveDatabaseCommand = new(OnMoveDatabaseCommand);
         FindCommand = new(OnFindCommand);
+        LoadFirstPageCommand = new(OnLoadFirstPageCommand);
     }
 
     private void LoadFirstPageAndCheckForSecond()
     {
+        PageNumber = 0;
         var repository = _dbManager.GetRepository();
         if (repository is null)
         {
             return;
         }
-        _people = new(repository.Get(_pageNumber, PEOPLE_ON_PAGE));
+        _people = new(repository.Get(_pageNumber * PEOPLE_ON_PAGE, PEOPLE_ON_PAGE));
         OnPropertyChanged(nameof(People));
         if (repository.Get(_pageNumber + 1, PEOPLE_ON_PAGE).Count != 0)
         {
@@ -82,7 +85,7 @@ public class MainViewModel : ViewModelBase, IDisposable
         {
             return false;
         }
-        _people = new(repository.Get(_pageNumber, PEOPLE_ON_PAGE));
+        _people = new(repository.Get(_pageNumber * PEOPLE_ON_PAGE, PEOPLE_ON_PAGE));
         OnPropertyChanged(nameof(People));
         return true;
     }
@@ -118,6 +121,10 @@ public class MainViewModel : ViewModelBase, IDisposable
         _pageNumber++;
         OnPropertyChanged(nameof(PageNumber));
         UpdatePagesFlags();
+        if (!LoadPeopleAndReturnTrueIfSuccess())
+        {
+            MessageBox.Show("Can't load people.");
+        }
     }
 
     private void OnPreviousPageCommandClick(object obj)
@@ -127,7 +134,7 @@ public class MainViewModel : ViewModelBase, IDisposable
         UpdatePagesFlags();
         if (!LoadPeopleAndReturnTrueIfSuccess())
         {
-            MessageBox.Show("Can't load persons.");
+            MessageBox.Show("Can't load people.");
         }
     }
 
@@ -288,6 +295,11 @@ public class MainViewModel : ViewModelBase, IDisposable
         People = new(people);
     }
 
+    private void OnLoadFirstPageCommand(object obj)
+    {
+        LoadFirstPageAndCheckForSecond();
+    }
+
     public void Dispose()
     {
         _dbManager.Dispose();
@@ -313,7 +325,15 @@ public class MainViewModel : ViewModelBase, IDisposable
         }
     }
 
-    public int PageNumber => _pageNumber;
+    public int PageNumber
+    {
+        get { return _pageNumber + 1; }
+        set
+        {
+            _pageNumber = value;
+            OnPropertyChanged(nameof(PageNumber));
+        }
+    }
 
     public bool HasMorePages => _hasMorePages;
 

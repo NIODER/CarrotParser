@@ -28,6 +28,7 @@
                 <MenuItem Header="Connection string" Command="{Binding ShowConnectionStringWindow}" />
                 <Separator />
                 <MenuItem Header="Find" Command="{Binding FindCommand}" />
+                <MenuItem Header="Load first page" Command="{Binding LoadFirstPageCommand}" />
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Download one" Command="{Binding DownloadOneCommand}"/>
