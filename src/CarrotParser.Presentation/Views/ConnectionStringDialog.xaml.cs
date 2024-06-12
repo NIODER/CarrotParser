@@ -15,7 +15,7 @@ namespace CarrotParser.Presentation.Views
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
-            var window = Parent as Window ?? throw new NullReferenceException("No window found for DeleteConfirmationDialog");
+            var window = Parent as Window ?? throw new NullReferenceException();
             window.Close();
         }
     }

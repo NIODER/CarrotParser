@@ -1,9 +1,12 @@
-﻿using CarrotParser.Application.Database;
+﻿using CarrotParser.Application;
+using CarrotParser.Application.Database;
 using CarrotParser.Application.Model;
 using CarrotParser.Application.Parser;
 using CarrotParser.Presentation.ViewModels.Common;
 using CarrotParser.Presentation.ViewModels.Common.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Windows;
 
 namespace CarrotParser.Presentation.ViewModels;
@@ -15,6 +18,7 @@ public class MainViewModel : ViewModelBase, IDisposable
     private readonly IDialogService _dialogService;
     private readonly IDbManager _dbManager;
     private readonly IPersonsParser _personsParser;
+    private readonly IConfiguration _configuration;
 
     private ObservableCollection<Person> _people = [];
     private Person? _selectedPerson;
@@ -29,18 +33,25 @@ public class MainViewModel : ViewModelBase, IDisposable
     public RelayCommand DownloadOneCommand { get; private set; }
     public RelayCommand DownloadManyCommand { get; private set; }
     public RelayCommand StopCommand { get; private set; }
+    public RelayCommand UpdatePersonCommand { get; private set; }
+    public RelayCommand DeletePersonCommand { get; private set; }
+    public RelayCommand MoveDatabaseCommand { get; private set; }
 
-    public MainViewModel(IDialogService dialogService, IDbManager dbManager, IPersonsParser personsParser)
+    public MainViewModel(IDialogService dialogService, IDbManager dbManager, IPersonsParser personsParser, IConfiguration configuration)
     {
         _dialogService = dialogService;
         _dbManager = dbManager;
         _personsParser = personsParser;
+        _configuration = configuration;
         ShowConnectionStringWindow = new(OnShowConnectionStringWindowClick);
         NextPageCommand = new(OnNextPageCommandClick);
         PreviousPageCommand = new(OnPreviousPageCommandClick);
         DownloadOneCommand = new(OnDownloadOneCommandClick);
         DownloadManyCommand = new(OnDownloadManyCommandClick);
         StopCommand = new(OnStopCommand);
+        UpdatePersonCommand = new(OnUpdatePersonCommand);
+        DeletePersonCommand = new(OnDeletePersonCommand);
+        MoveDatabaseCommand = new(OnMoveDatabaseCommand);
     }
 
     private void LoadFirstPageAndCheckForSecond()
@@ -177,6 +188,46 @@ public class MainViewModel : ViewModelBase, IDisposable
     private void OnStopCommand(object obj)
     {
         _cancellationTokenSource.Cancel();
+    }
+
+    private void OnUpdatePersonCommand(object obj)
+    {
+        _dialogService.ShowDialog<UpdatePersonDialogViewModel>((obj) => { });
+    }
+
+    private void OnDeletePersonCommand(object obj)
+    {
+        if (_selectedPerson is null)
+        {
+            return;
+        }
+        var repository = _dbManager.GetRepository();
+        if (repository is null)
+        {
+            MessageBox.Show("Can't operate with database.");
+            return;
+        }
+        repository.DeletePerson(_selectedPerson.Id);
+        _people.Remove(_selectedPerson);
+        OnPropertyChanged(nameof(People));
+    }
+
+    private void OnMoveDatabaseCommand(object obj)
+    {
+        _dialogService.ShowDialog<MoveDatabaseDialogViewModel>(MoveDatabaseCallback);
+    }
+
+    private void MoveDatabaseCallback(object newLocation)
+    {
+        string newPath = (string)newLocation;
+        var oldPath = _configuration.GetValue<string>(DepedencyInjection.DB_CONFIGURATION_SECTION_NAME);
+        if (oldPath is null)
+        {
+            MessageBox.Show("Can't find database.");
+            return;
+        }
+        _dbManager.MoveDatabase(oldPath, newPath);
+        MessageBox.Show($"Database moved to {newPath}.");
     }
 
     public void Dispose()

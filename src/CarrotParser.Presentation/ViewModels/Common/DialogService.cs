@@ -2,11 +2,13 @@
 using CarrotParser.Presentation.ViewModels.Dialog;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CarrotParser.Presentation.ViewModels.Common;
 
 internal class DialogService : IDialogService
 {
+    private const int WINDOW_HEADER_HEIGHT = 40;
     private static readonly Dictionary<Type, Type> _mappings = [];
 
     public static void RegisterDialog<TView, TViewModel>()
@@ -22,10 +24,12 @@ internal class DialogService : IDialogService
         ViewModelBase viewModel = (ViewModelBase)App.ApplicationHost.Services.GetRequiredService(typeof(TViewModel));
         DialogWindow _dialogWindow = new();
         var content = App.ApplicationHost.Services.GetRequiredService(viewType);
-        var cont = (FrameworkElement)content;
+        var frameworkElementContent = (FrameworkElement)content;
         ((IDialogViewModel)viewModel).OnResult += callback;
-        cont.DataContext = viewModel;
+        frameworkElementContent.DataContext = viewModel;
         _dialogWindow.Content = content;
+        _dialogWindow.Height = frameworkElementContent.Height + WINDOW_HEADER_HEIGHT;
+        _dialogWindow.Width = frameworkElementContent.Width;
         _dialogWindow.ShowDialog();
     }
 }

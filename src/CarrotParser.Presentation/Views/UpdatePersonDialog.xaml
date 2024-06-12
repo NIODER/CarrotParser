@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="CarrotParser.Presentation.Views.UpdatePersonDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:CarrotParser.Presentation.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:UpdatePersonDialogViewModel}"
+        mc:Ignorable="d"
+        Height="350" Width="600">
+    <UserControl.Resources>
+        <Style TargetType="Control" x:Key="Field">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="0.3" />
+        </Style>
+    </UserControl.Resources>
+    <DockPanel Background="White">
+        <Menu Height="20" VerticalAlignment="Top" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Save" Command="{Binding SaveUpdatesCommand}" Click="OnSaveClick" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Label Content="Id" Style="{StaticResource Field}" />
+                <Label Content="Created" Style="{StaticResource Field}" />
+                <Label Content="Gender" Style="{StaticResource Field}" />
+                <Label Content="Title" Style="{StaticResource Field}" />
+                <Label Content="Firstname" Style="{StaticResource Field}" />
+                <Label Content="Lastname" Style="{StaticResource Field}" />
+                <Label Content="Email" Style="{StaticResource Field}" />
+                <Label Content="Username" Style="{StaticResource Field}" />
+                <Label Content="Password" Style="{StaticResource Field}" />
+                <Label Content="Phone" Style="{StaticResource Field}" />
+                <Label Content="Nat" Style="{StaticResource Field}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <Label Content="{Binding Person.Login.Uuid}" Style="{StaticResource Field}" />
+                <Label Content="{Binding Person.Id.CreationTime}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Gender}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Name.Title}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Name.First}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Name.Last}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Email}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Login.Username}" Style="{StaticResource Field}" />
+                <PasswordBox PasswordChanged="OnPasswordChanged" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Phone}" Style="{StaticResource Field}" />
+                <TextBox Text="{Binding Person.Nat}" Style="{StaticResource Field}" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>

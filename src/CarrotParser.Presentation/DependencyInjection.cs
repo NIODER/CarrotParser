@@ -22,6 +22,8 @@ internal static class DependencyInjection
     {
         services.AddSingleton<MainWindow>();
         services.AddTransient<ConnectionStringDialog>();
+        services.AddTransient<UpdatePersonDialog>();
+        services.AddTransient<MoveDatabaseDialog>();
         return services;
     }
 
@@ -29,6 +31,8 @@ internal static class DependencyInjection
     {
         services.AddSingleton<MainViewModel>();
         services.AddTransient<ConnectionStringDialogViewModel>();
+        services.AddTransient<UpdatePersonDialogViewModel>();
+        services.AddTransient<MoveDatabaseDialogViewModel>();
         return services;
     }
 }

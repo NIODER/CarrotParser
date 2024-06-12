@@ -26,7 +26,6 @@ namespace CarrotParser.Presentation.ViewModels
         {
             _configuration.GetSection(DepedencyInjection.DB_CONFIGURATION_SECTION_NAME).Value = _connectionString;
             OnResult?.Invoke(ConnectionString);
-            MessageBox.Show($"Connection string saved as \"{_connectionString}\"");
         }
 
         public string ConnectionString

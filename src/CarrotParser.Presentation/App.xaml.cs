@@ -39,8 +39,9 @@ public partial class App : System.Windows.Application
 
     private static void RegisterDialogServices()
     {
-        //DialogService.RegisterDialog<Dialog, DialogViewModel>();
         DialogService.RegisterDialog<ConnectionStringDialog, ConnectionStringDialogViewModel>();
+        DialogService.RegisterDialog<UpdatePersonDialog, UpdatePersonDialogViewModel>();
+        DialogService.RegisterDialog<MoveDatabaseDialog, MoveDatabaseDialogViewModel>();
     }
 
     private static void RegisterWindowServices()

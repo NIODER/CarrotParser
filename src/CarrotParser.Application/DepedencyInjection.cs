@@ -1,4 +1,5 @@
-﻿using CarrotParser.Application.Database;
+﻿using CarrotParser.Application.Crypto;
+using CarrotParser.Application.Database;
 using CarrotParser.Application.Parser;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ public static class DepedencyInjection
     {
         services.AddDbManager(configuration);
         services.AddSingleton<IPersonsParser, PersonsParser>();
+        services.AddSingleton<IHashProvider, HashProvider>();
         return services;
     }
 
