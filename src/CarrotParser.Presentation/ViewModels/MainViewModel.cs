@@ -6,10 +6,7 @@ using CarrotParser.Presentation.Model;
 using CarrotParser.Presentation.ViewModels.Common;
 using CarrotParser.Presentation.ViewModels.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Linq.Expressions;
 using System.Windows;
 
 namespace CarrotParser.Presentation.ViewModels;
